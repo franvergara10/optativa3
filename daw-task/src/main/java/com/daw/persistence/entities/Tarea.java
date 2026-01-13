@@ -9,6 +9,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,5 +38,13 @@ public class Tarea {
 	
 	@Enumerated(value = EnumType.STRING)
 	private Estado estado;
+	
+	@Column(name = "id_usuario")
+	private int idUsuario;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_usuario", referencedColumnName = "id", insertable = false, updatable = false)
+	private Usuario usuario;
+	
 	
 }
