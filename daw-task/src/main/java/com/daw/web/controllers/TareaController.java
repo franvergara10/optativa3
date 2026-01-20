@@ -18,6 +18,7 @@ import com.daw.persistence.entities.Tarea;
 import com.daw.services.TareaService;
 import com.daw.services.exceptions.TareaException;
 import com.daw.services.exceptions.TareaNotFoundException;
+import com.daw.services.exceptions.TareaSecurityException;
 
 @RestController
 @RequestMapping("/tareas")
@@ -34,9 +35,11 @@ public class TareaController {
 	@GetMapping("/{idTarea}")
 	public ResponseEntity<?> findById(@PathVariable int idTarea) {
 		try {
-			return ResponseEntity.ok(this.tareaService.findById(idTarea));
+			return ResponseEntity.ok(this.tareaService.findByIdAndUsername(idTarea));
 		} catch (TareaNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		} catch (TareaSecurityException ex) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
 		}
 	}
 

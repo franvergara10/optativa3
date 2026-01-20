@@ -1,10 +1,18 @@
-INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES ('Comprar víveres', 'Ir al supermercado a comprar alimentos básicos', '2025-09-20', '2025-09-21', 'PENDIENTE');
-INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES ('Estudiar Java', 'Repasar colecciones y JPA', '2025-09-18', '2025-09-25', 'EN_PROGRESO');
-INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES ('Llamar al médico', 'Agendar cita anual de control', '2025-09-15', '2025-09-30', 'PENDIENTE');
-INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES ('Limpiar la casa', 'Barrido y trapeado completo', '2025-09-10', '2025-09-12', 'COMPLETADA');
-INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES ('Enviar informe mensual', 'Reporte de progreso del proyecto', '2025-09-01', '2025-09-05', 'COMPLETADA');
-INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES ('Revisar correos', 'Responder pendientes de la semana', '2025-09-25', '2025-09-26', 'PENDIENTE');
-INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES ('Pagar servicios', 'Luz, agua e internet', '2025-09-22', '2025-09-28', 'PENDIENTE');
-INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES ('Planificar vacaciones', 'Definir destino y fechas de viaje', '2025-09-05', '2025-10-05', 'EN_PROGRESO');
-INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES ('Reunión con equipo', 'Planificación sprint semanal', '2025-09-27', '2025-09-28', 'EN_PROGRESO');
-INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES ('Leer libro', 'Avanzar capítulos de novela', '2025-09-12', '2025-09-30', 'PENDIENTE');
+INSERT INTO usuario (username, password, rol) VALUES
+('admin', 'admin123', 'ADMIN'),
+('juan', 'juan123', 'USER'),
+('maria', 'maria123', 'USER'),
+('lucia', '$2y$10$dmtcwcB.aOj7bgwvboNA8.v09PC1Xa68rOelPaBqWC4GiFQuGUBRy', 'USER');
+
+INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado, id_usuario) VALUES
+('Configurar proyecto', 'Crear estructura inicial del proyecto', '2024-12-01', '2024-12-05', 'PENDIENTE', 1),
+
+('Diseñar base de datos', 'Modelo entidad-relación', '2024-12-02', '2024-12-10', 'EN_PROGRESO', 2),
+
+('Implementar login', 'Autenticación de usuarios', '2024-12-03', '2024-12-08', 'COMPLETADA', 2),
+
+('Crear API tareas', 'CRUD de tareas con Spring Boot', '2024-12-04', '2024-12-12', 'EN_PROGRESO', 3),
+
+('Pruebas unitarias', 'Tests con JUnit', '2024-12-05', '2024-12-15', 'PENDIENTE', 4),
+
+('Documentación', 'Documentar endpoints REST', '2024-12-06', '2024-12-18', 'PENDIENTE', 1);

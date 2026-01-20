@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.daw.persistence.entities.Estado;
@@ -11,6 +12,7 @@ import com.daw.persistence.entities.Tarea;
 import com.daw.persistence.repositories.TareaRepository;
 import com.daw.services.exceptions.TareaException;
 import com.daw.services.exceptions.TareaNotFoundException;
+import com.daw.services.exceptions.TareaSecurityException;
 
 @Service
 public class TareaService {
@@ -18,12 +20,12 @@ public class TareaService {
 	@Autowired
 	private TareaRepository tareaRepository;
 
-	// findAll
+// findAll
 	public List<Tarea> findAll() {
 		return this.tareaRepository.findAll();
 	}
 
-	// findById
+// findById
 	public Tarea findById(int idTarea) {
 		if (!this.tareaRepository.existsById(idTarea)) {
 			throw new TareaNotFoundException("La tarea con id " + idTarea + " no existe. ");
@@ -32,7 +34,7 @@ public class TareaService {
 		return this.tareaRepository.findById(idTarea).get();
 	}
 
-	// create
+// create
 	public Tarea create(Tarea tarea) {
 		if (tarea.getFechaVencimiento().isBefore(LocalDate.now())) {
 			throw new TareaException("La fecha de vencimiento debe ser posterior. ");
@@ -51,7 +53,7 @@ public class TareaService {
 		return this.tareaRepository.save(tarea);
 	}
 
-	// update
+// update
 	public Tarea update(Tarea tarea, int idTarea) {
 		if (tarea.getId() != idTarea) {
 			throw new TareaException(
@@ -67,9 +69,9 @@ public class TareaService {
 			throw new TareaException("No se puede modificar la fecha de creación. ");
 		}
 
-		// Recupero la tarea que está en BBDD y modifico solo los campos permitidos.
-		// Si guardo directamente tarea, voy a poner a null la fecha de creación y el
-		// estado.
+// Recupero la tarea que está en BBDD y modifico solo los campos permitidos.
+// Si guardo directamente tarea, voy a poner a null la fecha de creación y el
+// estado.
 		Tarea tareaBD = this.findById(idTarea);
 		tareaBD.setDescripcion(tarea.getDescripcion());
 		tareaBD.setTitulo(tarea.getTitulo());
@@ -78,7 +80,7 @@ public class TareaService {
 		return this.tareaRepository.save(tareaBD);
 	}
 
-	// delete
+// delete
 	public void delete(int idTarea) {
 		if (!this.tareaRepository.existsById(idTarea)) {
 			throw new TareaNotFoundException("La tarea no existe");
@@ -96,33 +98,39 @@ public class TareaService {
 		tarea.setEstado(Estado.EN_PROGRESO);
 		return this.tareaRepository.save(tarea);
 	}
-	
+
 //	Obtener las tareas pendientes.
 	public List<Tarea> pendientes() {
 		return this.tareaRepository.findByEstado(Estado.PENDIENTE);
 	}
-	
+
 //	Obtener las tareas en progreso.
 	public List<Tarea> enProgreso() {
 		return this.tareaRepository.findByEstado(Estado.EN_PROGRESO);
 	}
+
 //	Obtener las tareas completadas.
 	public List<Tarea> completadas() {
 		return this.tareaRepository.findByEstado(Estado.COMPLETADA);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+// Endpoints securizados
+	public Tarea findByIdAndUsername(int idTarea) {
+		if (!this.tareaRepository.existsById(idTarea)) {
+			throw new TareaNotFoundException("La tarea con id " + idTarea + " no existe. ");
+		}
+		if (!this.tareaRepository.findById(idTarea).get().getUsuario().getUsername()
+				.equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+			throw new TareaSecurityException("La tarea no pertenece al usuario "
+					+ SecurityContextHolder.getContext().getAuthentication().getName());
+		}
+
+		return this.tareaRepository.findById(idTarea).get();
+	}
+
+	public List<Tarea> findByUser() {
+		return this.tareaRepository
+				.findByUsuarioUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+	}
+
 }
